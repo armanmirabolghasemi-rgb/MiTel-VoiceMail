@@ -1,2 +1,3 @@
-Scripts/* linguist-vendored
-Content/* linguist-vendored
+Scripts/** linguist-vendored
+Content/** linguist-vendored
+*.min.js linguist-vendored
