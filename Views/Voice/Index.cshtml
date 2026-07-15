@@ -1,0 +1,89 @@
+﻿```cshtml
+@model List<Genration.Models.VoiceMessage>
+
+@{
+    ViewBag.Title = "Voice Messages";
+}
+
+<h2>Voice Messages</h2>
+
+<table class="table table-bordered table-striped">
+
+    <thead>
+        <tr>
+            <th>Phone Number</th>
+            <th>Call Date</th>
+            <th>Reference Code</th>
+            <th>Caller Voice</th>
+            <th>Reply Voice</th>
+            <th>Upload Reply</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.PhoneNumber</td>
+
+                <td>@item.CallDate.ToString("yyyy/MM/dd HH:mm:ss")</td>
+
+                <td>@item.RefrenceCode</td>
+
+                <td>
+                    @if (!string.IsNullOrEmpty(item.VoicePath))
+                    {
+                        <audio controls style="width:250px;">
+                            <source src="@Url.Action("Play","Voice",new { referenceCode = item.RefrenceCode })"
+                                    type="audio/wav" />
+                        </audio>
+                    }
+                    else
+                    {
+                        <span>No Voice</span>
+                    }
+                </td>
+
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ReplyVoicePath))
+                    {
+                        <audio controls style="width:250px;">
+                            <source src="@item.ReplyVoicePath"
+                                    type="audio/wav" />
+                        </audio>
+                    }
+                    else
+                    {
+                        <span>No Reply</span>
+                    }
+                </td>
+
+                <td>
+
+                    @using (Html.BeginForm("UploadReplyVoice",
+                                           "Voice",
+                                           FormMethod.Post,
+                                           new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.Hidden("referenceCode", item.RefrenceCode)
+
+                    <input type="file" name="voiceFile" accept="audio/*" />
+
+                        <br /><br />
+
+                        <input type="submit"
+                               value="Upload Reply"
+                               class="btn btn-primary" />
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+```
